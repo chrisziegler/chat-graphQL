@@ -7,9 +7,12 @@ const db = {
     { id: '3', email: 'sharon@gmail.com', name: 'Sharon' }
   ]
 };
+// users list itself cant be null
+// atleast an array with no objects [falsy]
+// & User object itself can't be null
 const schema = buildSchema(`
   type Query {
-    user: User
+    users: [User!]!
   }
   type User {
     id: ID!
@@ -20,24 +23,22 @@ const schema = buildSchema(`
 `);
 // (3) Resolver function
 const rootValue = {
-  users: () => 'GraphQL works!'
+  // when we return db users we expect an array
+  // with individual users inside it [line 12]
+  users: () => db.users
 };
 
-// call the graphql function expects at least these 3 params
-// this function allows us to 1st of all, have a schema (2)
 graphql(
   schema,
-  // query, placeholder, actual query below (4)
   `
     {
-      message
+      users {
+        id
+        email
+      }
     }
   `,
   rootValue
 )
-  .then(
-    // only 1 argument so don't need console.log in arrow function
-    // .then(res => console.log(res))
-    console.log
-  )
+  .then(res => console.dir(res, { depth: null }))
   .catch(console.error);
