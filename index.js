@@ -62,7 +62,7 @@ const resolvers = {
   Mutation: {
     addUser: ({ email, name }) => {
       const user = {
-        id: crypto.randomBytes(10).toString('hex'),
+        id: crypto.randomBytes(10).toString(),
         email,
         name
       };
@@ -76,7 +76,7 @@ const resolvers = {
     // we need parent to extract (destructure) the user id off the parent
     // object - The User object that the messages belong to
     messages: ({ id }) =>
-      db.messages.filter(message => message.userId === this.id)
+      db.messages.filter(message => message.userId === id)
   }
 };
 
